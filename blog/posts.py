@@ -1,12 +1,13 @@
 from __future__ import annotations
 from blog.database import mongo
 from datetime import datetime
+import pymongo
 
 def get_all_posts(publish: bool = True):
     """Return all posts
     """
     posts = mongo.db.posts.find({"publish": publish})
-    return posts.sort("date")
+    return posts.sort("date", pymongo.DESCENDING)
 
 
 def get_post_by_slug(slug: str) -> dict:
