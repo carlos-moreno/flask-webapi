@@ -3,10 +3,10 @@ from blog.database import mongo
 from datetime import datetime
 import pymongo
 
-def get_all_posts(publish: bool = True):
+def get_all_posts(published: bool = True):
     """Return all posts
     """
-    posts = mongo.db.posts.find({"publish": publish})
+    posts = mongo.db.posts.find({"published": published})
     return posts.sort("date", pymongo.DESCENDING)
 
 
@@ -17,12 +17,12 @@ def get_post_by_slug(slug: str) -> dict:
     return post
 
 def update_post_by_slug(slug: str, data: dict) -> dict:
-    """update the post by slug
+    """Update the post by slug
     """
     # TODO: Se o título mudar, atualizar o slug (falhar se já existir)
     return mongo.db.posts.find_one_and_update({"slug": slug}, {"$set": data})
 
-def new_post(title: str, content: str, publish: bool = True) -> str:
+def new_post(title: str, content: str, published: bool = True) -> str:
     """Create a new post
     """
     slug = title.replace(" ", "-").replace("_", "-").lower()
@@ -32,7 +32,7 @@ def new_post(title: str, content: str, publish: bool = True) -> str:
         {
             "title": title,
             "content": content,
-            "publish": publish,
+            "published": published,
             "slug": slug,
             "date": datetime.now(),
         }
